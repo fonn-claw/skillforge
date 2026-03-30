@@ -1,7 +1,7 @@
 # Requirements: SkillForge
 
 **Defined:** 2026-03-30
-**Core Value:** The interactive skill tree IS the experience — a full-canvas, zoomable graph where learners spatially navigate their knowledge landscape with RPG-inspired visual feedback.
+**Core Value:** The interactive skill tree IS the experience -- a full-canvas, zoomable graph where learners spatially navigate their knowledge landscape with RPG-inspired visual feedback.
 
 ## v1 Requirements
 
@@ -124,13 +124,63 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (Populated during roadmap creation) | | |
+| AUTH-01 | Phase 1 | Pending |
+| AUTH-02 | Phase 1 | Pending |
+| AUTH-03 | Phase 1 | Pending |
+| AUTH-04 | Phase 1 | Pending |
+| TREE-01 | Phase 2 | Pending |
+| TREE-02 | Phase 2 | Pending |
+| TREE-03 | Phase 2 | Pending |
+| TREE-04 | Phase 2 | Pending |
+| TREE-05 | Phase 2 | Pending |
+| TREE-06 | Phase 2 | Pending |
+| TREE-07 | Phase 2 | Pending |
+| NODE-01 | Phase 2 | Pending |
+| NODE-02 | Phase 2 | Pending |
+| NODE-03 | Phase 2 | Pending |
+| NODE-04 | Phase 2 | Pending |
+| NODE-05 | Phase 2 | Pending |
+| PREREQ-01 | Phase 2 | Pending |
+| PREREQ-02 | Phase 2 | Pending |
+| PREREQ-03 | Phase 2 | Pending |
+| PREREQ-04 | Phase 2 | Pending |
+| CHAL-01 | Phase 3 | Pending |
+| CHAL-02 | Phase 3 | Pending |
+| CHAL-03 | Phase 3 | Pending |
+| CHAL-04 | Phase 3 | Pending |
+| CHAL-05 | Phase 3 | Pending |
+| MAST-01 | Phase 3 | Pending |
+| MAST-02 | Phase 3 | Pending |
+| MAST-03 | Phase 3 | Pending |
+| MAST-04 | Phase 3 | Pending |
+| ARCH-01 | Phase 3 | Pending |
+| ARCH-02 | Phase 3 | Pending |
+| ARCH-03 | Phase 3 | Pending |
+| ARCH-04 | Phase 3 | Pending |
+| ARCH-05 | Phase 3 | Pending |
+| MENT-01 | Phase 4 | Pending |
+| MENT-02 | Phase 4 | Pending |
+| MENT-03 | Phase 4 | Pending |
+| MENT-04 | Phase 4 | Pending |
+| ADMN-01 | Phase 4 | Pending |
+| ADMN-02 | Phase 4 | Pending |
+| ADMN-03 | Phase 4 | Pending |
+| ADMN-04 | Phase 4 | Pending |
+| DEMO-01 | Phase 1 | Pending |
+| DEMO-02 | Phase 1 | Pending |
+| DEMO-03 | Phase 1 | Pending |
+| DEMO-04 | Phase 1 | Pending |
+| DEMO-05 | Phase 1 | Pending |
+| DSGN-01 | Phase 1 | Pending |
+| DSGN-02 | Phase 1 | Pending |
+| DSGN-03 | Phase 1 | Pending |
+| DSGN-04 | Phase 2 | Pending |
 
 **Coverage:**
 - v1 requirements: 42 total
-- Mapped to phases: 0
-- Unmapped: 42 ⚠️
+- Mapped to phases: 42
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-30*
-*Last updated: 2026-03-30 after initial definition*
+*Last updated: 2026-03-30 after roadmap creation*
