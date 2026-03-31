@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Check, Lock, FileCode, ClipboardList } from "lucide-react";
 import type { Node, Edge } from "@xyflow/react";
 import MasterySteps from "./MasterySteps";
+import ChallengeModal from "./ChallengeModal";
 
 const MASTERY_ORDER = [
   "locked",
@@ -38,6 +39,7 @@ type Props = {
   nodesData: Node[];
   edgesData: Edge[];
   onClose: () => void;
+  onTreeRefresh?: () => void;
 };
 
 function getMasteryIndex(level: string): number {
@@ -49,10 +51,12 @@ export default function NodeDetailPanel({
   nodesData,
   edgesData,
   onClose,
+  onTreeRefresh,
 }: Props) {
   const [challenges, setChallenges] = useState<Challenge[]>([]);
   const [loadingChallenges, setLoadingChallenges] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [activeChallengeId, setActiveChallengeId] = useState<string | null>(null);
 
   const node = nodesData.find((n) => n.id === nodeId);
   const data = node?.data as Record<string, unknown> | undefined;
@@ -85,14 +89,24 @@ export default function NodeDetailPanel({
   });
 
   // Fetch challenges
-  useEffect(() => {
+  function fetchChallenges() {
     setLoadingChallenges(true);
     fetch(`/api/tree/nodes/${nodeId}/challenges`)
       .then((r) => r.json())
       .then((data: Challenge[]) => setChallenges(data))
       .catch(() => setChallenges([]))
       .finally(() => setLoadingChallenges(false));
-  }, [nodeId]);
+  }
+
+  useEffect(() => {
+    fetchChallenges();
+  }, [nodeId]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  function handleChallengeComplete() {
+    setActiveChallengeId(null);
+    fetchChallenges();
+    onTreeRefresh?.();
+  }
 
   // Escape key handler
   useEffect(() => {
@@ -226,6 +240,7 @@ export default function NodeDetailPanel({
             {challenges.map((c) => (
               <div
                 key={c.id}
+                onClick={() => setActiveChallengeId(c.id)}
                 className="bg-anvil-gray rounded-lg p-3 border border-steel-edge hover:border-arcane-blue/50 transition-colors cursor-pointer"
               >
                 <div className="flex items-center justify-between mb-1">
@@ -251,6 +266,13 @@ export default function NodeDetailPanel({
           </div>
         )}
       </div>
+
+      {/* Challenge Modal */}
+      <ChallengeModal
+        challengeId={activeChallengeId}
+        onClose={() => setActiveChallengeId(null)}
+        onComplete={handleChallengeComplete}
+      />
     </>
   );
 

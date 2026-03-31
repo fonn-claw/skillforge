@@ -296,6 +296,7 @@ export default function SkillTreeFlow() {
               nodesData={nodes}
               edgesData={edges}
               onClose={() => setSelectedNodeId(null)}
+              onTreeRefresh={refreshTree}
             />
           )}
         </AnimatePresence>
