@@ -14,12 +14,12 @@
 
 ### Skill Tree Visualization
 
-- [ ] **TREE-01**: Learner sees full-canvas interactive skill tree with hexagonal nodes and curved connection lines
-- [ ] **TREE-02**: Learner can zoom and pan the skill tree canvas
-- [ ] **TREE-03**: Skill tree displays node mastery state visually (locked=dim/dashed, novice=faint blue, apprentice=blue, journeyman=teal, expert=gold, master=white-gold)
-- [ ] **TREE-04**: Connection lines animate with gradient flow when prerequisites are met
-- [ ] **TREE-05**: Minimap shows full tree with current viewport highlighted (bottom-left)
-- [ ] **TREE-06**: Mastered nodes emit slow rhythmic pulse in their mastery color
+- [x] **TREE-01**: Learner sees full-canvas interactive skill tree with hexagonal nodes and curved connection lines
+- [x] **TREE-02**: Learner can zoom and pan the skill tree canvas
+- [x] **TREE-03**: Skill tree displays node mastery state visually (locked=dim/dashed, novice=faint blue, apprentice=blue, journeyman=teal, expert=gold, master=white-gold)
+- [x] **TREE-04**: Connection lines animate with gradient flow when prerequisites are met
+- [x] **TREE-05**: Minimap shows full tree with current viewport highlighted (bottom-left)
+- [x] **TREE-06**: Mastered nodes emit slow rhythmic pulse in their mastery color
 - [ ] **TREE-07**: Top bar displays archetype badge, progress counter, and user avatar (48px, semi-transparent)
 
 ### Node Interaction
@@ -28,14 +28,14 @@
 - [ ] **NODE-02**: Detail panel shows skill name, mastery level badge, description, prerequisites with check/lock status
 - [ ] **NODE-03**: Detail panel shows available challenges as stacked clickable cards
 - [ ] **NODE-04**: Mastery progress displayed as 5 rune-like step indicators (not a progress bar)
-- [ ] **NODE-05**: Hovering a node shows tooltip with skill name and current level
+- [x] **NODE-05**: Hovering a node shows tooltip with skill name and current level
 
 ### Prerequisite System
 
 - [ ] **PREREQ-01**: Nodes unlock when all prerequisite nodes reach required mastery level
 - [ ] **PREREQ-02**: Unlocking a node triggers animated energy flow along connection from parent to child (800ms)
 - [ ] **PREREQ-03**: Newly unlocked node transitions from locked to novice state with brief flash
-- [ ] **PREREQ-04**: Locked nodes display with desaturated color, dashed border, and lock icon overlay
+- [x] **PREREQ-04**: Locked nodes display with desaturated color, dashed border, and lock icon overlay
 
 ### Challenge System
 
@@ -128,22 +128,22 @@
 | AUTH-02 | Phase 1 | Complete |
 | AUTH-03 | Phase 1 | Complete |
 | AUTH-04 | Phase 1 | Complete |
-| TREE-01 | Phase 2 | Pending |
-| TREE-02 | Phase 2 | Pending |
-| TREE-03 | Phase 2 | Pending |
-| TREE-04 | Phase 2 | Pending |
-| TREE-05 | Phase 2 | Pending |
-| TREE-06 | Phase 2 | Pending |
+| TREE-01 | Phase 2 | Complete |
+| TREE-02 | Phase 2 | Complete |
+| TREE-03 | Phase 2 | Complete |
+| TREE-04 | Phase 2 | Complete |
+| TREE-05 | Phase 2 | Complete |
+| TREE-06 | Phase 2 | Complete |
 | TREE-07 | Phase 2 | Pending |
 | NODE-01 | Phase 2 | Pending |
 | NODE-02 | Phase 2 | Pending |
 | NODE-03 | Phase 2 | Pending |
 | NODE-04 | Phase 2 | Pending |
-| NODE-05 | Phase 2 | Pending |
+| NODE-05 | Phase 2 | Complete |
 | PREREQ-01 | Phase 2 | Pending |
 | PREREQ-02 | Phase 2 | Pending |
 | PREREQ-03 | Phase 2 | Pending |
-| PREREQ-04 | Phase 2 | Pending |
+| PREREQ-04 | Phase 2 | Complete |
 | CHAL-01 | Phase 3 | Pending |
 | CHAL-02 | Phase 3 | Pending |
 | CHAL-03 | Phase 3 | Pending |
