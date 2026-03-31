@@ -1,21 +1,46 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { X, CheckCircle, XCircle, MessageSquare } from "lucide-react";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import {
+  X,
+  Check,
+  XCircle,
+  ExternalLink,
+  ClipboardCheck,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 
-type Submission = {
+type Review = {
   id: string;
-  userId: string;
-  challengeId: string;
-  status: string;
-  response: unknown;
-  score: number | null;
-  feedback: string | null;
+  learnerName: string;
+  learnerEmail: string;
+  challengeTitle: string;
+  challengeType: string;
+  masteryLevel: string;
+  nodeId: string | null;
+  response: { description?: string; url?: string } | null;
   submittedAt: string;
-  user?: { displayName: string; email: string };
-  challenge?: { title: string; type: string; masteryLevel: string };
 };
+
+const MASTERY_BADGE_COLORS: Record<string, string> = {
+  novice: "#4A7CFF",
+  apprentice: "#4A7CFF",
+  journeyman: "#14B8A6",
+  expert: "#F0A830",
+  master: "#FFF7DB",
+};
+
+function timeAgo(dateStr: string): string {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+}
 
 type Props = {
   open: boolean;
@@ -23,94 +48,186 @@ type Props = {
 };
 
 export default function ReviewPanel({ open, onClose }: Props) {
-  const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<Record<string, string>>({});
+  const [processing, setProcessing] = useState<string | null>(null);
 
   useEffect(() => {
     if (!open) return;
     setLoading(true);
-    fetch("/api/mentor/submissions")
-      .then((r) => r.json())
-      .then((data: Submission[]) => setSubmissions(Array.isArray(data) ? data : []))
-      .catch(() => setSubmissions([]))
+    fetch("/api/mentor/reviews")
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data: Review[]) => setReviews(data))
+      .catch(() => setReviews([]))
       .finally(() => setLoading(false));
   }, [open]);
 
-  async function handleReview(id: string, approved: boolean) {
-    await fetch(`/api/mentor/submissions/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        status: approved ? "approved" : "rejected",
-        score: approved ? 100 : 0,
-        feedback: approved ? "Approved by mentor" : "Needs revision",
-      }),
-    });
-    setSubmissions((prev) => prev.filter((s) => s.id !== id));
+  async function handleAction(id: string, action: "approve" | "reject") {
+    setProcessing(id);
+    try {
+      const res = await fetch(`/api/mentor/reviews/${id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, feedback: feedback[id] || undefined }),
+      });
+      if (res.ok) {
+        setReviews((prev) => prev.filter((r) => r.id !== id));
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setProcessing(null);
+    }
   }
 
   return (
-    <AnimatePresence>
-      {open && (
-        <motion.div
-          initial={{ x: 400, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          exit={{ x: 400, opacity: 0 }}
-          transition={{ type: "spring", damping: 25, stiffness: 200 }}
-          className="absolute top-0 right-0 w-[400px] h-full z-50 bg-[#151A28]/95 backdrop-blur-[20px] border-l border-steel-edge overflow-y-auto p-6"
-        >
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 text-mist hover:text-moonlight transition-colors"
-          >
-            <X size={20} />
-          </button>
+    <motion.div
+      initial={{ x: -400, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      exit={{ x: -400, opacity: 0 }}
+      transition={{ type: "spring", damping: 25, stiffness: 200 }}
+      className="absolute top-0 left-0 w-[400px] h-full z-50 bg-[#151A28]/95 backdrop-blur-[20px] border-r border-steel-edge overflow-y-auto p-6"
+    >
+      {/* Close */}
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 text-mist hover:text-moonlight transition-colors z-10"
+      >
+        <X size={20} />
+      </button>
 
-          <h2 className="font-heading text-xl text-moonlight mb-4">
-            Submission Reviews
-          </h2>
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6 pr-8">
+        <ClipboardCheck size={20} className="text-arcane-blue shrink-0" />
+        <h2 className="font-heading text-xl text-moonlight">
+          Pending Reviews
+        </h2>
+        <span className="ml-auto text-sm text-mist">
+          {reviews.length}
+        </span>
+      </div>
 
-          {loading ? (
-            <p className="text-mist animate-pulse text-sm">Loading submissions...</p>
-          ) : submissions.length === 0 ? (
-            <div className="text-center py-12">
-              <MessageSquare size={32} className="mx-auto text-mist/50 mb-3" />
-              <p className="text-mist text-sm">No pending submissions</p>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {submissions.map((sub) => (
-                <div
-                  key={sub.id}
-                  className="bg-anvil-gray rounded-lg p-4 border border-steel-edge"
+      {/* Content */}
+      {loading ? (
+        <p className="text-sm text-mist animate-pulse">Loading reviews...</p>
+      ) : reviews.length === 0 ? (
+        <div className="text-center py-12">
+          <ClipboardCheck size={40} className="text-steel-edge mx-auto mb-3" />
+          <p className="text-mist text-sm">No pending reviews</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {reviews.map((r) => {
+            const isExpanded = expandedId === r.id;
+            const isProcessing = processing === r.id;
+            const badgeColor =
+              MASTERY_BADGE_COLORS[r.masteryLevel] ?? "#4A7CFF";
+            const resp = r.response as { description?: string; url?: string } | null;
+
+            return (
+              <div
+                key={r.id}
+                className="bg-anvil-gray rounded-lg border border-steel-edge overflow-hidden"
+              >
+                {/* Card header */}
+                <button
+                  onClick={() =>
+                    setExpandedId(isExpanded ? null : r.id)
+                  }
+                  className="w-full p-4 text-left flex items-start gap-3 hover:bg-forge-gray/30 transition-colors"
                 >
-                  <p className="text-moonlight text-sm font-medium mb-1">
-                    {sub.challenge?.title ?? "Challenge"}
-                  </p>
-                  <p className="text-mist text-xs mb-2">
-                    {sub.user?.displayName ?? "Learner"} &middot;{" "}
-                    <span className="capitalize">{sub.challenge?.masteryLevel}</span>
-                  </p>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handleReview(sub.id, true)}
-                      className="flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg bg-verdant/20 text-verdant hover:bg-verdant/30 transition-colors"
-                    >
-                      <CheckCircle size={14} /> Approve
-                    </button>
-                    <button
-                      onClick={() => handleReview(sub.id, false)}
-                      className="flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg bg-ember/20 text-ember hover:bg-ember/30 transition-colors"
-                    >
-                      <XCircle size={14} /> Reject
-                    </button>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-moonlight text-sm font-medium truncate">
+                      {r.challengeTitle}
+                    </p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-xs text-mist">
+                        {r.learnerName}
+                      </span>
+                      <span
+                        className="text-xs capitalize px-1.5 py-0.5 rounded"
+                        style={{
+                          backgroundColor: `${badgeColor}20`,
+                          color: badgeColor,
+                        }}
+                      >
+                        {r.masteryLevel}
+                      </span>
+                      <span className="text-xs text-mist/60 ml-auto shrink-0">
+                        {timeAgo(r.submittedAt)}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </motion.div>
+                  {isExpanded ? (
+                    <ChevronUp size={16} className="text-mist shrink-0 mt-1" />
+                  ) : (
+                    <ChevronDown size={16} className="text-mist shrink-0 mt-1" />
+                  )}
+                </button>
+
+                {/* Expanded content */}
+                {isExpanded && (
+                  <div className="px-4 pb-4 border-t border-steel-edge/50 pt-3">
+                    {/* Submission content */}
+                    {resp?.description && (
+                      <p className="text-sm text-moonlight/80 mb-2 whitespace-pre-wrap">
+                        {resp.description}
+                      </p>
+                    )}
+                    {resp?.url && (
+                      <a
+                        href={resp.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-sm text-arcane-blue hover:underline mb-3"
+                      >
+                        <ExternalLink size={12} />
+                        View submission
+                      </a>
+                    )}
+
+                    {/* Feedback */}
+                    <textarea
+                      placeholder="Feedback (optional)..."
+                      value={feedback[r.id] ?? ""}
+                      onChange={(e) =>
+                        setFeedback((prev) => ({
+                          ...prev,
+                          [r.id]: e.target.value,
+                        }))
+                      }
+                      className="w-full bg-forge-gray border border-steel-edge rounded p-2 text-sm text-moonlight placeholder:text-mist/50 resize-none mb-3"
+                      rows={2}
+                    />
+
+                    {/* Actions */}
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleAction(r.id, "approve")}
+                        disabled={isProcessing}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium bg-verdant text-white hover:bg-verdant/80 transition-colors disabled:opacity-50"
+                      >
+                        <Check size={14} />
+                        Approve
+                      </button>
+                      <button
+                        onClick={() => handleAction(r.id, "reject")}
+                        disabled={isProcessing}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded text-sm font-medium bg-blood-ruby/70 text-moonlight hover:bg-blood-ruby/50 transition-colors disabled:opacity-50"
+                      >
+                        <XCircle size={14} />
+                        Reject
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       )}
-    </AnimatePresence>
+    </motion.div>
   );
 }
