@@ -29,7 +29,7 @@ export default function LoginPage() {
         return;
       }
 
-      router.push("/");
+      window.location.href = "/";
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
