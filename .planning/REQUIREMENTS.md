@@ -84,9 +84,9 @@
 
 ### Visual Design
 
-- [ ] **DSGN-01**: Dark RPG-inspired theme using design spec colors (Void Black #0A0E17 background, Forge Gray panels, Arcane Blue primary)
-- [ ] **DSGN-02**: Cinzel font for headings/skill names, IBM Plex Sans for body text
-- [ ] **DSGN-03**: All pre-generated assets from public/assets/ used as documented (logos, node icons, archetype portraits, backgrounds)
+- [x] **DSGN-01**: Dark RPG-inspired theme using design spec colors (Void Black #0A0E17 background, Forge Gray panels, Arcane Blue primary)
+- [x] **DSGN-02**: Cinzel font for headings/skill names, IBM Plex Sans for body text
+- [x] **DSGN-03**: All pre-generated assets from public/assets/ used as documented (logos, node icons, archetype portraits, backgrounds)
 - [ ] **DSGN-04**: Responsive design that works on desktop and tablet viewports
 
 ## v2 Requirements
@@ -171,9 +171,9 @@
 | DEMO-03 | Phase 1 | Pending |
 | DEMO-04 | Phase 1 | Pending |
 | DEMO-05 | Phase 1 | Pending |
-| DSGN-01 | Phase 1 | Pending |
-| DSGN-02 | Phase 1 | Pending |
-| DSGN-03 | Phase 1 | Pending |
+| DSGN-01 | Phase 1 | Complete |
+| DSGN-02 | Phase 1 | Complete |
+| DSGN-03 | Phase 1 | Complete |
 | DSGN-04 | Phase 2 | Pending |
 
 **Coverage:**
