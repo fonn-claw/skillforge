@@ -27,12 +27,12 @@ SkillForge delivers an RPG-inspired skill tree learning platform in four phases:
   3. CodeForge Academy skill tree with 3 branches and ~15 nodes is queryable from the API, including challenges at each mastery level
   4. 20 demo learners exist with varied progression, including the specific scenarios (1 advanced, 1 beginner, 3 stuck on Database)
   5. App renders with dark RPG theme, correct fonts (Cinzel/IBM Plex Sans), and pre-generated assets loaded
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
-- [ ] 01-03: TBD
+- [ ] 01-01-PLAN.md — Project scaffold, RPG design system (Tailwind tokens, fonts), and complete Drizzle schema
+- [ ] 01-02-PLAN.md — JWT auth system, middleware, auth/tree API routes, login/register UI pages
+- [ ] 01-03-PLAN.md — Seed data (CodeForge Academy tree, 23 users, challenges, progression), DAG validation, smoke tests
 
 ### Phase 2: Skill Tree Canvas
 **Goal**: Learners see and navigate a full-canvas interactive skill tree -- the hero experience where hexagonal nodes show mastery state, connections animate, and clicking a node reveals its details
@@ -91,7 +91,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/3 | Not started | - |
+| 1. Foundation | 0/3 | Planning complete | - |
 | 2. Skill Tree Canvas | 0/3 | Not started | - |
 | 3. Engagement Loop | 0/2 | Not started | - |
 | 4. Role Views and Polish | 0/3 | Not started | - |
