@@ -1,0 +1,153 @@
+/* Skill Tree Node Styles */
+
+.hexagon-node {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.hexagon-node:hover {
+  transform: scale(1.1);
+}
+
+/* Mastery level glow states */
+
+.mastery-locked .hex-fill {
+  fill: #151a28;
+  stroke: #2a3150;
+  stroke-dasharray: 4 2;
+}
+
+.mastery-novice .hex-fill {
+  fill: #151a28;
+  stroke: rgba(74, 124, 255, 0.4);
+  filter: drop-shadow(0 0 4px rgba(74, 124, 255, 0.2));
+}
+
+.mastery-apprentice .hex-fill {
+  fill: #151a28;
+  stroke: #4a7cff;
+  filter: drop-shadow(0 0 6px rgba(74, 124, 255, 0.4));
+}
+
+.mastery-journeyman .hex-fill {
+  fill: #151a28;
+  stroke: #14b8a6;
+  filter: drop-shadow(0 0 8px rgba(20, 184, 166, 0.5));
+}
+
+.mastery-expert .hex-fill {
+  fill: #151a28;
+  stroke: #f0a830;
+  filter: drop-shadow(0 0 10px rgba(240, 168, 48, 0.6));
+}
+
+.mastery-master .hex-fill {
+  fill: #1e2438;
+  stroke: #fff7db;
+  filter: drop-shadow(0 0 14px rgba(255, 247, 219, 0.7));
+}
+
+/* Inner hexagon */
+.hex-inner {
+  stroke: none;
+}
+
+/* Mastery pulse animation for expert and master nodes */
+@keyframes mastery-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.mastery-expert .hex-fill,
+.mastery-master .hex-fill {
+  animation: mastery-pulse 3s ease-in-out infinite;
+}
+
+/* Ember particle effect for expert/master nodes */
+@keyframes ember-rise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-20px) scale(0.3);
+    opacity: 0;
+  }
+}
+
+.mastery-expert::after,
+.mastery-master::after {
+  content: "";
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: currentColor;
+  border-radius: 50%;
+  bottom: 50%;
+  left: 50%;
+  pointer-events: none;
+  animation: ember-rise 2s ease-out infinite;
+}
+
+.mastery-expert {
+  color: #f0a830;
+}
+
+.mastery-master {
+  color: #fff7db;
+}
+
+/* Mastery indicator icon */
+.mastery-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+/* Hover tooltip */
+.node-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(21, 26, 40, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #e8ecf4;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  margin-bottom: 4px;
+  z-index: 10;
+}
+
+.hexagon-node:hover .node-tooltip {
+  opacity: 1;
+}
+
+/* Lock icon overlay */
+.lock-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  opacity: 0.7;
+  pointer-events: none;
+}
