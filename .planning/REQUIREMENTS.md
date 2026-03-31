@@ -54,11 +54,11 @@
 
 ### Archetype System
 
-- [ ] **ARCH-01**: New learner takes 5-7 question archetype quiz with visual card answers (not radio buttons)
-- [ ] **ARCH-02**: Quiz presented one question at a time with smooth transitions on dark atmospheric background
-- [ ] **ARCH-03**: After final question, archetype reveal with converging particles, icon, color, and description
-- [ ] **ARCH-04**: Four archetypes: Builder (forge orange), Analyst (crystal blue), Explorer (verdant green), Collaborator (royal purple)
-- [ ] **ARCH-05**: Archetype badge displayed in top bar and learner profile
+- [x] **ARCH-01**: New learner takes 5-7 question archetype quiz with visual card answers (not radio buttons)
+- [x] **ARCH-02**: Quiz presented one question at a time with smooth transitions on dark atmospheric background
+- [x] **ARCH-03**: After final question, archetype reveal with converging particles, icon, color, and description
+- [x] **ARCH-04**: Four archetypes: Builder (forge orange), Analyst (crystal blue), Explorer (verdant green), Collaborator (royal purple)
+- [x] **ARCH-05**: Archetype badge displayed in top bar and learner profile
 
 ### Mentor Features
 
@@ -153,11 +153,11 @@
 | MAST-02 | Phase 3 | Pending |
 | MAST-03 | Phase 3 | Pending |
 | MAST-04 | Phase 3 | Pending |
-| ARCH-01 | Phase 3 | Pending |
-| ARCH-02 | Phase 3 | Pending |
-| ARCH-03 | Phase 3 | Pending |
-| ARCH-04 | Phase 3 | Pending |
-| ARCH-05 | Phase 3 | Pending |
+| ARCH-01 | Phase 3 | Complete |
+| ARCH-02 | Phase 3 | Complete |
+| ARCH-03 | Phase 3 | Complete |
+| ARCH-04 | Phase 3 | Complete |
+| ARCH-05 | Phase 3 | Complete |
 | MENT-01 | Phase 4 | Pending |
 | MENT-02 | Phase 4 | Pending |
 | MENT-03 | Phase 4 | Pending |
