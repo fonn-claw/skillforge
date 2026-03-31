@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, createContext } from "react";
+import { useEffect, useState, useCallback, useRef, createContext } from "react";
 import {
   ReactFlow,
   MiniMap,
@@ -14,21 +14,16 @@ import "@xyflow/react/dist/style.css";
 
 import HexagonNode from "./HexagonNode";
 import PrerequisiteEdge from "./PrerequisiteEdge";
+import {
+  computeNodeUnlockStatus,
+  computeEdgeStatus,
+  MASTERY_ORDER,
+  type MasteryLevel,
+} from "@/lib/tree-utils";
 
 // CRITICAL: Define outside component for stable reference
 const nodeTypes = { hexagon: HexagonNode } as const;
 const edgeTypes = { prerequisite: PrerequisiteEdge } as const;
-
-const MASTERY_ORDER = [
-  "locked",
-  "novice",
-  "apprentice",
-  "journeyman",
-  "expert",
-  "master",
-] as const;
-
-type MasteryLevel = (typeof MASTERY_ORDER)[number];
 
 // -- Context for selected node (used by NodeDetailPanel in Plan 02-02) --
 export const TreeSelectionContext = createContext<{
@@ -64,30 +59,6 @@ type ApiEdge = {
 
 // -- Helpers --
 
-function getMasteryIndex(level: MasteryLevel): number {
-  return MASTERY_ORDER.indexOf(level);
-}
-
-function getEdgeStatus(
-  edge: ApiEdge,
-  masteryMap: Map<string, MasteryLevel>
-): "inactive" | "active" | "completed" {
-  const sourceMastery = masteryMap.get(edge.sourceNodeId) ?? "locked";
-  const targetMastery = masteryMap.get(edge.targetNodeId) ?? "locked";
-
-  // If target already has mastery (not locked), the path is completed
-  if (targetMastery !== "locked") {
-    return "completed";
-  }
-
-  // If source meets the required level, path is active
-  if (getMasteryIndex(sourceMastery) >= getMasteryIndex(edge.requiredMasteryLevel)) {
-    return "active";
-  }
-
-  return "inactive";
-}
-
 function getMasteryColor(mastery: string | undefined): string {
   switch (mastery) {
     case "novice":
@@ -105,36 +76,61 @@ function getMasteryColor(mastery: string | undefined): string {
   }
 }
 
-function toFlowNodes(apiNodes: ApiNode[]): Node[] {
-  return apiNodes.map((n) => ({
-    id: n.id,
-    type: "hexagon",
-    position: { x: n.positionX, y: n.positionY },
-    data: {
-      name: n.name,
-      mastery: n.mastery?.currentLevel ?? "locked",
-      iconKey: n.iconKey,
-      branchName: n.branchName,
-      description: n.description,
-      xpCurrent: n.mastery?.xpCurrent ?? 0,
-      xpRequired: n.mastery?.xpRequired ?? 100,
-    },
-  }));
+function toFlowNodes(
+  apiNodes: ApiNode[],
+  apiEdges: ApiEdge[],
+  masteryMap: Map<string, MasteryLevel>,
+  justUnlockedIds?: Set<string>
+): Node[] {
+  const unlockStatus = computeNodeUnlockStatus(apiNodes, apiEdges, masteryMap);
+
+  return apiNodes.map((n) => {
+    const status = unlockStatus.get(n.id);
+    const mastery = n.mastery?.currentLevel ?? "locked";
+    const canUnlock =
+      mastery === "locked" && (status?.shouldBeUnlocked ?? false);
+    const justUnlocked = justUnlockedIds?.has(n.id) ?? false;
+
+    return {
+      id: n.id,
+      type: "hexagon",
+      position: { x: n.positionX, y: n.positionY },
+      data: {
+        name: n.name,
+        mastery,
+        iconKey: n.iconKey,
+        branchName: n.branchName,
+        description: n.description,
+        xpCurrent: n.mastery?.xpCurrent ?? 0,
+        xpRequired: n.mastery?.xpRequired ?? 100,
+        canUnlock,
+        justUnlocked,
+      },
+    };
+  });
 }
 
 function toFlowEdges(
   apiEdges: ApiEdge[],
-  masteryMap: Map<string, MasteryLevel>
+  masteryMap: Map<string, MasteryLevel>,
+  justUnlockedIds?: Set<string>
 ): Edge[] {
-  return apiEdges.map((e) => ({
-    id: e.id,
-    source: e.sourceNodeId,
-    target: e.targetNodeId,
-    type: "prerequisite",
-    data: {
-      status: getEdgeStatus(e, masteryMap),
-    },
-  }));
+  return apiEdges.map((e) => {
+    let status = computeEdgeStatus(e, masteryMap);
+
+    // Override to 'unlocking' for edges targeting a just-unlocked node
+    if (justUnlockedIds?.has(e.targetNodeId) && status === "unlocking") {
+      status = "unlocking";
+    }
+
+    return {
+      id: e.id,
+      source: e.sourceNodeId,
+      target: e.targetNodeId,
+      type: "prerequisite",
+      data: { status },
+    };
+  });
 }
 
 function buildMasteryMap(apiNodes: ApiNode[]): Map<string, MasteryLevel> {
@@ -153,6 +149,13 @@ export default function SkillTreeFlow() {
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Track previous lock states to detect unlock transitions
+  const prevLockMapRef = useRef<Map<string, boolean>>(new Map());
+  // Store raw API data for re-rendering after animation timeout
+  const apiDataRef = useRef<{ nodes: ApiNode[]; edges: ApiEdge[] } | null>(
+    null
+  );
+
   useEffect(() => {
     Promise.all([
       fetch("/api/tree/nodes").then((r) => r.json()),
@@ -160,8 +163,49 @@ export default function SkillTreeFlow() {
     ])
       .then(([apiNodes, apiEdges]: [ApiNode[], ApiEdge[]]) => {
         const masteryMap = buildMasteryMap(apiNodes);
-        setNodes(toFlowNodes(apiNodes));
-        setEdges(toFlowEdges(apiEdges, masteryMap));
+        apiDataRef.current = { nodes: apiNodes, edges: apiEdges };
+
+        // Detect nodes that just transitioned from locked to unlocked
+        const justUnlockedIds = new Set<string>();
+        const prevMap = prevLockMapRef.current;
+
+        for (const n of apiNodes) {
+          const currentMastery = n.mastery?.currentLevel ?? "locked";
+          const wasLocked = prevMap.get(n.id) ?? true; // assume locked if unseen
+          const isNowUnlocked = currentMastery !== "locked";
+
+          if (wasLocked && isNowUnlocked && prevMap.size > 0) {
+            // Only trigger animation on subsequent loads (not first mount)
+            justUnlockedIds.add(n.id);
+          }
+        }
+
+        // Update previous lock state tracking
+        const newLockMap = new Map<string, boolean>();
+        for (const n of apiNodes) {
+          newLockMap.set(
+            n.id,
+            (n.mastery?.currentLevel ?? "locked") === "locked"
+          );
+        }
+        prevLockMapRef.current = newLockMap;
+
+        // Render with animation flags if any just-unlocked nodes
+        const unlockSet = justUnlockedIds.size > 0 ? justUnlockedIds : undefined;
+        setNodes(toFlowNodes(apiNodes, apiEdges, masteryMap, unlockSet));
+        setEdges(toFlowEdges(apiEdges, masteryMap, unlockSet));
+
+        // After 800ms, clear animation flags
+        if (justUnlockedIds.size > 0) {
+          setTimeout(() => {
+            if (apiDataRef.current) {
+              const { nodes: an, edges: ae } = apiDataRef.current;
+              const mm = buildMasteryMap(an);
+              setNodes(toFlowNodes(an, ae, mm));
+              setEdges(toFlowEdges(ae, mm));
+            }
+          }, 800);
+        }
       })
       .catch((err) => {
         console.error("Failed to load skill tree:", err);
