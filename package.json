@@ -10,7 +10,8 @@
     "db:push": "npx drizzle-kit push",
     "db:generate": "npx drizzle-kit generate",
     "db:studio": "npx drizzle-kit studio",
-    "seed": "npx tsx db/seed.ts"
+    "seed": "npx tsx db/seed.ts",
+    "smoke-test": "bash scripts/smoke-test.sh"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
@@ -37,6 +38,7 @@
     "postcss": "^8.5.8",
     "tailwindcss": "^4.2.2",
     "tsx": "^4.21.0",
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.2",
+    "ws": "^8.20.0"
   }
 }
