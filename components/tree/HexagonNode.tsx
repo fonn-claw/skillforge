@@ -37,7 +37,7 @@ function HexagonNode({ data }: NodeProps) {
     .join(" ");
 
   return (
-    <div className={extraClasses}>
+    <div className={extraClasses} data-mastery={mastery}>
       <Handle
         type="target"
         position={Position.Top}

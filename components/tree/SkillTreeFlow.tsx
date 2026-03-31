@@ -153,69 +153,87 @@ export default function SkillTreeFlow() {
 
   // Track previous lock states to detect unlock transitions
   const prevLockMapRef = useRef<Map<string, boolean>>(new Map());
+  // Track previous mastery levels to detect mastery changes
+  const prevMasteryMapRef = useRef<Map<string, MasteryLevel>>(new Map());
   // Store raw API data for re-rendering after animation timeout
   const apiDataRef = useRef<{ nodes: ApiNode[]; edges: ApiEdge[] } | null>(
     null
   );
 
-  useEffect(() => {
-    Promise.all([
+  const refreshTree = useCallback(async () => {
+    const [apiNodes, apiEdges]: [ApiNode[], ApiEdge[]] = await Promise.all([
       fetch("/api/tree/nodes").then((r) => r.json()),
       fetch("/api/tree/edges").then((r) => r.json()),
-    ])
-      .then(([apiNodes, apiEdges]: [ApiNode[], ApiEdge[]]) => {
-        const masteryMap = buildMasteryMap(apiNodes);
-        apiDataRef.current = { nodes: apiNodes, edges: apiEdges };
+    ]);
 
-        // Detect nodes that just transitioned from locked to unlocked
-        const justUnlockedIds = new Set<string>();
-        const prevMap = prevLockMapRef.current;
+    const masteryMap = buildMasteryMap(apiNodes);
+    apiDataRef.current = { nodes: apiNodes, edges: apiEdges };
 
-        for (const n of apiNodes) {
-          const currentMastery = n.mastery?.currentLevel ?? "locked";
-          const wasLocked = prevMap.get(n.id) ?? true; // assume locked if unseen
-          const isNowUnlocked = currentMastery !== "locked";
+    // Detect nodes that just transitioned from locked to unlocked
+    const justUnlockedIds = new Set<string>();
+    const prevMap = prevLockMapRef.current;
 
-          if (wasLocked && isNowUnlocked && prevMap.size > 0) {
-            // Only trigger animation on subsequent loads (not first mount)
-            justUnlockedIds.add(n.id);
-          }
+    for (const n of apiNodes) {
+      const currentMastery = n.mastery?.currentLevel ?? "locked";
+      const wasLocked = prevMap.get(n.id) ?? true;
+      const isNowUnlocked = currentMastery !== "locked";
+
+      if (wasLocked && isNowUnlocked && prevMap.size > 0) {
+        justUnlockedIds.add(n.id);
+      }
+    }
+
+    // Detect mastery level changes (for potential future animation)
+    const masteryChangedIds = new Set<string>();
+    const prevMastery = prevMasteryMapRef.current;
+    if (prevMastery.size > 0) {
+      for (const n of apiNodes) {
+        const current = n.mastery?.currentLevel ?? "locked";
+        const previous = prevMastery.get(n.id);
+        if (previous && previous !== current) {
+          masteryChangedIds.add(n.id);
         }
+      }
+    }
 
-        // Update previous lock state tracking
-        const newLockMap = new Map<string, boolean>();
-        for (const n of apiNodes) {
-          newLockMap.set(
-            n.id,
-            (n.mastery?.currentLevel ?? "locked") === "locked"
-          );
+    // Update previous lock state tracking
+    const newLockMap = new Map<string, boolean>();
+    for (const n of apiNodes) {
+      newLockMap.set(
+        n.id,
+        (n.mastery?.currentLevel ?? "locked") === "locked"
+      );
+    }
+    prevLockMapRef.current = newLockMap;
+    prevMasteryMapRef.current = masteryMap;
+
+    // Render with animation flags if any just-unlocked nodes
+    const unlockSet = justUnlockedIds.size > 0 ? justUnlockedIds : undefined;
+    setNodes(toFlowNodes(apiNodes, apiEdges, masteryMap, unlockSet));
+    setEdges(toFlowEdges(apiEdges, masteryMap, unlockSet));
+
+    // After 800ms, clear animation flags
+    if (justUnlockedIds.size > 0) {
+      setTimeout(() => {
+        if (apiDataRef.current) {
+          const { nodes: an, edges: ae } = apiDataRef.current;
+          const mm = buildMasteryMap(an);
+          setNodes(toFlowNodes(an, ae, mm));
+          setEdges(toFlowEdges(ae, mm));
         }
-        prevLockMapRef.current = newLockMap;
+      }, 800);
+    }
+  }, [setNodes, setEdges]);
 
-        // Render with animation flags if any just-unlocked nodes
-        const unlockSet = justUnlockedIds.size > 0 ? justUnlockedIds : undefined;
-        setNodes(toFlowNodes(apiNodes, apiEdges, masteryMap, unlockSet));
-        setEdges(toFlowEdges(apiEdges, masteryMap, unlockSet));
-
-        // After 800ms, clear animation flags
-        if (justUnlockedIds.size > 0) {
-          setTimeout(() => {
-            if (apiDataRef.current) {
-              const { nodes: an, edges: ae } = apiDataRef.current;
-              const mm = buildMasteryMap(an);
-              setNodes(toFlowNodes(an, ae, mm));
-              setEdges(toFlowEdges(ae, mm));
-            }
-          }, 800);
-        }
-      })
+  useEffect(() => {
+    refreshTree()
       .catch((err) => {
         console.error("Failed to load skill tree:", err);
       })
       .finally(() => {
         setLoading(false);
       });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [refreshTree]);
 
   const onNodeClick = useCallback((_: React.MouseEvent, node: Node) => {
     setSelectedNodeId(node.id);
