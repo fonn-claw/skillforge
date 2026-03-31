@@ -62,10 +62,10 @@
 
 ### Mentor Features
 
-- [ ] **MENT-01**: Mentor sees skill tree with heatmap overlay showing cohort mastery levels per node
-- [ ] **MENT-02**: Clicking a node in mentor view shows learner breakdown (who's at what level, who's stuck)
-- [ ] **MENT-03**: Mentor can review and approve/reject submitted challenge responses
-- [ ] **MENT-04**: Stuck learners highlighted in amber on the heatmap overlay
+- [x] **MENT-01**: Mentor sees skill tree with heatmap overlay showing cohort mastery levels per node
+- [x] **MENT-02**: Clicking a node in mentor view shows learner breakdown (who's at what level, who's stuck)
+- [x] **MENT-03**: Mentor can review and approve/reject submitted challenge responses
+- [x] **MENT-04**: Stuck learners highlighted in amber on the heatmap overlay
 
 ### Admin Features
 
@@ -158,10 +158,10 @@
 | ARCH-03 | Phase 3 | Complete |
 | ARCH-04 | Phase 3 | Complete |
 | ARCH-05 | Phase 3 | Complete |
-| MENT-01 | Phase 4 | Pending |
-| MENT-02 | Phase 4 | Pending |
-| MENT-03 | Phase 4 | Pending |
-| MENT-04 | Phase 4 | Pending |
+| MENT-01 | Phase 4 | Complete |
+| MENT-02 | Phase 4 | Complete |
+| MENT-03 | Phase 4 | Complete |
+| MENT-04 | Phase 4 | Complete |
 | ADMN-01 | Phase 4 | Pending |
 | ADMN-02 | Phase 4 | Pending |
 | ADMN-03 | Phase 4 | Pending |
