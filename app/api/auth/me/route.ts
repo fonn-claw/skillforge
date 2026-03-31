@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
-import { users } from "@/db/schema";
+import { users, archetypes } from "@/db/schema";
 import { headers } from "next/headers";
 
 export async function GET() {
@@ -13,7 +13,7 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const [user] = await db
+    const rows = await db
       .select({
         id: users.id,
         email: users.email,
@@ -21,16 +21,36 @@ export async function GET() {
         role: users.role,
         archetypeId: users.archetypeId,
         createdAt: users.createdAt,
+        archetypeName: archetypes.name,
+        archetypeColor: archetypes.color,
+        archetypeIconKey: archetypes.iconKey,
       })
       .from(users)
+      .leftJoin(archetypes, eq(users.archetypeId, archetypes.id))
       .where(eq(users.id, userId))
       .limit(1);
 
-    if (!user) {
+    const row = rows[0];
+
+    if (!row) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    return NextResponse.json(user);
+    return NextResponse.json({
+      id: row.id,
+      email: row.email,
+      displayName: row.displayName,
+      role: row.role,
+      archetypeId: row.archetypeId,
+      createdAt: row.createdAt,
+      archetype: row.archetypeName
+        ? {
+            name: row.archetypeName,
+            color: row.archetypeColor,
+            iconKey: row.archetypeIconKey,
+          }
+        : null,
+    });
   } catch (error) {
     console.error("Me endpoint error:", error);
     return NextResponse.json(
