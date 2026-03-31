@@ -12,7 +12,10 @@ The interactive skill tree IS the experience — a full-canvas, zoomable, pannab
 
 ### Validated
 
-(None yet — ship to validate)
+- ✓ Authentication with role-based access (learner, mentor, admin) — Phase 1
+- ✓ Database schema for skill tree DAG (7 tables, 4 enums) — Phase 1
+- ✓ Demo data seeded: CodeForge Academy, 20 learners, 3 branches — Phase 1
+- ✓ Dark RPG theme with Cinzel/IBM Plex Sans fonts and pre-generated assets — Phase 1
 
 ### Active
 
@@ -69,4 +72,4 @@ The interactive skill tree IS the experience — a full-canvas, zoomable, pannab
 | Demo accounts with seeded data | 3 demo accounts (learner/mentor/admin) with realistic CodeForge Academy data | — Pending |
 
 ---
-*Last updated: 2026-03-30 after initialization*
+*Last updated: 2026-03-31 after Phase 1 completion*
