@@ -47,10 +47,10 @@
 
 ### Mastery Progression
 
-- [ ] **MAST-01**: Each node has 5 mastery levels: Novice, Apprentice, Journeyman, Expert, Master
-- [ ] **MAST-02**: Completing level-appropriate challenges advances mastery toward next level
-- [ ] **MAST-03**: Node visual intensity (glow, size, border color) updates in real-time as mastery advances
-- [ ] **MAST-04**: Expert and Master nodes display particle effects (embers drifting upward)
+- [x] **MAST-01**: Each node has 5 mastery levels: Novice, Apprentice, Journeyman, Expert, Master
+- [x] **MAST-02**: Completing level-appropriate challenges advances mastery toward next level
+- [x] **MAST-03**: Node visual intensity (glow, size, border color) updates in real-time as mastery advances
+- [x] **MAST-04**: Expert and Master nodes display particle effects (embers drifting upward)
 
 ### Archetype System
 
@@ -149,10 +149,10 @@
 | CHAL-03 | Phase 3 | Pending |
 | CHAL-04 | Phase 3 | Pending |
 | CHAL-05 | Phase 3 | Pending |
-| MAST-01 | Phase 3 | Pending |
-| MAST-02 | Phase 3 | Pending |
-| MAST-03 | Phase 3 | Pending |
-| MAST-04 | Phase 3 | Pending |
+| MAST-01 | Phase 3 | Complete |
+| MAST-02 | Phase 3 | Complete |
+| MAST-03 | Phase 3 | Complete |
+| MAST-04 | Phase 3 | Complete |
 | ARCH-01 | Phase 3 | Complete |
 | ARCH-02 | Phase 3 | Complete |
 | ARCH-03 | Phase 3 | Complete |
