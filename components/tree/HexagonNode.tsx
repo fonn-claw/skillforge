@@ -17,6 +17,8 @@ export type HexNodeData = {
   description: string;
   xpCurrent: number;
   xpRequired: number;
+  canUnlock?: boolean;
+  justUnlocked?: boolean;
 };
 
 function HexagonNode({ data }: NodeProps) {
@@ -25,8 +27,17 @@ function HexagonNode({ data }: NodeProps) {
   const isLocked = mastery === "locked";
   const masteryLabel = mastery.charAt(0).toUpperCase() + mastery.slice(1);
 
+  const extraClasses = [
+    `hexagon-node`,
+    `mastery-${mastery}`,
+    d.justUnlocked ? "node-unlock-flash" : "",
+    d.canUnlock && isLocked ? "node-can-unlock" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <div className={`hexagon-node mastery-${mastery}`}>
+    <div className={extraClasses}>
       <Handle
         type="target"
         position={Position.Top}

@@ -3,7 +3,7 @@
 import { BaseEdge, getBezierPath, type EdgeProps } from "@xyflow/react";
 
 export type PrereqEdgeData = {
-  status: "inactive" | "active" | "completed";
+  status: "inactive" | "active" | "completed" | "unlocking";
 };
 
 export default function PrerequisiteEdge({
@@ -27,15 +27,17 @@ export default function PrerequisiteEdge({
 
   const d = (data as PrereqEdgeData) ?? { status: "inactive" };
 
+  const isUnlocking = d.status === "unlocking";
+
   const strokeColor =
     d.status === "completed"
       ? "#34D399"
-      : d.status === "active"
+      : d.status === "active" || isUnlocking
         ? `url(#grad-${id})`
         : "#2A3150";
 
   return (
-    <>
+    <g className={isUnlocking ? "edge-unlocking" : undefined}>
       <defs>
         <linearGradient
           id={`grad-${id}`}
@@ -47,6 +49,13 @@ export default function PrerequisiteEdge({
           <stop offset="0%" stopColor="#4A7CFF" />
           <stop offset="100%" stopColor="#14B8A6" />
         </linearGradient>
+        <filter id={`glow-${id}`}>
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
       </defs>
 
       <BaseEdge
@@ -54,9 +63,38 @@ export default function PrerequisiteEdge({
         path={edgePath}
         style={{
           stroke: strokeColor,
-          strokeWidth: 2,
+          strokeWidth: isUnlocking ? 3 : 2,
         }}
       />
+
+      {/* Unlocking: one-shot 800ms energy flow with trailing glow */}
+      {isUnlocking && (
+        <>
+          {/* Trailing glow circle */}
+          <circle r="10" fill="#4A7CFF" opacity="0.3">
+            <animateMotion
+              dur="0.8s"
+              repeatCount="1"
+              fill="freeze"
+              path={edgePath}
+              begin="0.1s"
+            />
+          </circle>
+          {/* Main energy particle */}
+          <circle
+            r="6"
+            fill="#4A7CFF"
+            filter={`url(#glow-${id})`}
+          >
+            <animateMotion
+              dur="0.8s"
+              repeatCount="1"
+              fill="freeze"
+              path={edgePath}
+            />
+          </circle>
+        </>
+      )}
 
       {d.status === "active" && (
         <circle r="4" fill="#4A7CFF">
@@ -77,6 +115,6 @@ export default function PrerequisiteEdge({
           />
         </circle>
       )}
-    </>
+    </g>
   );
 }
