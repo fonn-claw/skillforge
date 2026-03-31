@@ -2,6 +2,7 @@
 
 import { memo } from "react";
 import { Handle, Position, type NodeProps } from "@xyflow/react";
+import { HeatmapNodeBadge, type HeatmapNodeData } from "@/components/mentor/HeatmapOverlay";
 
 export type HexNodeData = {
   name: string;
@@ -19,6 +20,7 @@ export type HexNodeData = {
   xpRequired: number;
   canUnlock?: boolean;
   justUnlocked?: boolean;
+  heatmapData?: HeatmapNodeData;
 };
 
 function HexagonNode({ data }: NodeProps) {
@@ -80,6 +82,9 @@ function HexagonNode({ data }: NodeProps) {
           height={20}
         />
       )}
+
+      {/* Heatmap badge (mentor mode) */}
+      {d.heatmapData && <HeatmapNodeBadge data={d.heatmapData} />}
 
       {/* Hover tooltip */}
       <div className="node-tooltip">

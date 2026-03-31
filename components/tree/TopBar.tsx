@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Menu, Star, LogOut } from "lucide-react";
+import { Menu, Star, LogOut, BarChart3, ClipboardCheck } from "lucide-react";
+import { useMentorContext } from "./MentorContext";
 
 type UserData = {
   id: string;
@@ -26,6 +27,8 @@ export default function TopBar() {
   const router = useRouter();
   const [user, setUser] = useState<UserData | null>(null);
   const [progress, setProgress] = useState({ completed: 0, total: 0 });
+  const { heatmapMode, setHeatmapMode, reviewPanelOpen, setReviewPanelOpen } = useMentorContext();
+  const [pendingReviewCount, setPendingReviewCount] = useState(0);
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -44,6 +47,15 @@ export default function TopBar() {
       })
       .catch(() => {});
   }, []);
+
+  // Fetch pending review count for mentors
+  useEffect(() => {
+    if (!user || (user.role !== "mentor" && user.role !== "admin")) return;
+    fetch("/api/mentor/reviews")
+      .then((r) => (r.ok ? r.json() : []))
+      .then((reviews: unknown[]) => setPendingReviewCount(reviews.length))
+      .catch(() => {});
+  }, [user]);
 
   async function handleLogout() {
     await fetch("/api/auth/logout", { method: "POST" });
@@ -105,8 +117,41 @@ export default function TopBar() {
         )}
       </div>
 
-      {/* Right: avatar + logout */}
+      {/* Right: mentor controls + avatar + logout */}
       <div className="flex items-center gap-3">
+        {/* Mentor/Admin: heatmap toggle + review button */}
+        {user && (user.role === "mentor" || user.role === "admin") && (
+          <>
+            <button
+              onClick={() => setHeatmapMode(!heatmapMode)}
+              className={`relative p-1.5 rounded transition-colors ${
+                heatmapMode
+                  ? "bg-arcane-blue/20 text-arcane-blue"
+                  : "text-mist hover:text-moonlight"
+              }`}
+              title={heatmapMode ? "Disable heatmap" : "Enable heatmap"}
+            >
+              <BarChart3 size={18} />
+            </button>
+            <button
+              onClick={() => setReviewPanelOpen(!reviewPanelOpen)}
+              className={`relative p-1.5 rounded transition-colors ${
+                reviewPanelOpen
+                  ? "bg-arcane-blue/20 text-arcane-blue"
+                  : "text-mist hover:text-moonlight"
+              }`}
+              title="Review submissions"
+            >
+              <ClipboardCheck size={18} />
+              {pendingReviewCount > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-ember-gold text-void-black text-[10px] font-bold flex items-center justify-center">
+                  {pendingReviewCount > 9 ? "9+" : pendingReviewCount}
+                </span>
+              )}
+            </button>
+          </>
+        )}
+
         <div
           className="w-8 h-8 rounded-full flex items-center justify-center text-moonlight font-heading text-sm shrink-0"
           style={{
