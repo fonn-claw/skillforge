@@ -39,11 +39,11 @@
 
 ### Challenge System
 
-- [ ] **CHAL-01**: Learner can start a quiz challenge from the node detail panel
-- [ ] **CHAL-02**: Quiz challenges present multiple-choice questions with immediate feedback
-- [ ] **CHAL-03**: Completing a challenge awards mastery XP toward next level
-- [ ] **CHAL-04**: Challenges increase in difficulty with mastery level (mechanically distinct per level, not just harder questions)
-- [ ] **CHAL-05**: Learner can submit project challenges (link/description) for mentor review
+- [x] **CHAL-01**: Learner can start a quiz challenge from the node detail panel
+- [x] **CHAL-02**: Quiz challenges present multiple-choice questions with immediate feedback
+- [x] **CHAL-03**: Completing a challenge awards mastery XP toward next level
+- [x] **CHAL-04**: Challenges increase in difficulty with mastery level (mechanically distinct per level, not just harder questions)
+- [x] **CHAL-05**: Learner can submit project challenges (link/description) for mentor review
 
 ### Mastery Progression
 
@@ -144,11 +144,11 @@
 | PREREQ-02 | Phase 2 | Complete |
 | PREREQ-03 | Phase 2 | Complete |
 | PREREQ-04 | Phase 2 | Complete |
-| CHAL-01 | Phase 3 | Pending |
-| CHAL-02 | Phase 3 | Pending |
-| CHAL-03 | Phase 3 | Pending |
-| CHAL-04 | Phase 3 | Pending |
-| CHAL-05 | Phase 3 | Pending |
+| CHAL-01 | Phase 3 | Complete |
+| CHAL-02 | Phase 3 | Complete |
+| CHAL-03 | Phase 3 | Complete |
+| CHAL-04 | Phase 3 | Complete |
+| CHAL-05 | Phase 3 | Complete |
 | MAST-01 | Phase 3 | Complete |
 | MAST-02 | Phase 3 | Complete |
 | MAST-03 | Phase 3 | Complete |
