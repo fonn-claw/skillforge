@@ -7,10 +7,10 @@
 
 ### Authentication
 
-- [ ] **AUTH-01**: User can sign up with email and password
-- [ ] **AUTH-02**: User can log in and maintain session across browser refresh
-- [ ] **AUTH-03**: User can log out from any screen
-- [ ] **AUTH-04**: System enforces role-based access (learner, mentor, admin) with appropriate view switching
+- [x] **AUTH-01**: User can sign up with email and password
+- [x] **AUTH-02**: User can log in and maintain session across browser refresh
+- [x] **AUTH-03**: User can log out from any screen
+- [x] **AUTH-04**: System enforces role-based access (learner, mentor, admin) with appropriate view switching
 
 ### Skill Tree Visualization
 
@@ -124,10 +124,10 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 1 | Pending |
-| AUTH-02 | Phase 1 | Pending |
-| AUTH-03 | Phase 1 | Pending |
-| AUTH-04 | Phase 1 | Pending |
+| AUTH-01 | Phase 1 | Complete |
+| AUTH-02 | Phase 1 | Complete |
+| AUTH-03 | Phase 1 | Complete |
+| AUTH-04 | Phase 1 | Complete |
 | TREE-01 | Phase 2 | Pending |
 | TREE-02 | Phase 2 | Pending |
 | TREE-03 | Phase 2 | Pending |
