@@ -32,9 +32,9 @@
 
 ### Prerequisite System
 
-- [ ] **PREREQ-01**: Nodes unlock when all prerequisite nodes reach required mastery level
-- [ ] **PREREQ-02**: Unlocking a node triggers animated energy flow along connection from parent to child (800ms)
-- [ ] **PREREQ-03**: Newly unlocked node transitions from locked to novice state with brief flash
+- [x] **PREREQ-01**: Nodes unlock when all prerequisite nodes reach required mastery level
+- [x] **PREREQ-02**: Unlocking a node triggers animated energy flow along connection from parent to child (800ms)
+- [x] **PREREQ-03**: Newly unlocked node transitions from locked to novice state with brief flash
 - [x] **PREREQ-04**: Locked nodes display with desaturated color, dashed border, and lock icon overlay
 
 ### Challenge System
@@ -140,9 +140,9 @@
 | NODE-03 | Phase 2 | Pending |
 | NODE-04 | Phase 2 | Pending |
 | NODE-05 | Phase 2 | Complete |
-| PREREQ-01 | Phase 2 | Pending |
-| PREREQ-02 | Phase 2 | Pending |
-| PREREQ-03 | Phase 2 | Pending |
+| PREREQ-01 | Phase 2 | Complete |
+| PREREQ-02 | Phase 2 | Complete |
+| PREREQ-03 | Phase 2 | Complete |
 | PREREQ-04 | Phase 2 | Complete |
 | CHAL-01 | Phase 3 | Pending |
 | CHAL-02 | Phase 3 | Pending |
