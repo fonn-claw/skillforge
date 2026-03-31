@@ -11,9 +11,11 @@ import {
   type Edge,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
+import { AnimatePresence } from "framer-motion";
 
 import HexagonNode from "./HexagonNode";
 import PrerequisiteEdge from "./PrerequisiteEdge";
+import NodeDetailPanel from "./NodeDetailPanel";
 import {
   computeNodeUnlockStatus,
   computeEdgeStatus,
@@ -128,7 +130,7 @@ function toFlowEdges(
       source: e.sourceNodeId,
       target: e.targetNodeId,
       type: "prerequisite",
-      data: { status },
+      data: { status, requiredMasteryLevel: e.requiredMasteryLevel },
     };
   });
 }
@@ -269,6 +271,16 @@ export default function SkillTreeFlow() {
             showInteractive={false}
           />
         </ReactFlow>
+        <AnimatePresence>
+          {selectedNodeId && (
+            <NodeDetailPanel
+              nodeId={selectedNodeId}
+              nodesData={nodes}
+              edgesData={edges}
+              onClose={() => setSelectedNodeId(null)}
+            />
+          )}
+        </AnimatePresence>
       </div>
     </TreeSelectionContext.Provider>
   );
