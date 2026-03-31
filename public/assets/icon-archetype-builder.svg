@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+  <!-- Hammer - Builder archetype -->
+  <rect x="11" y="4" width="2" height="12" rx="1" fill="#FF6B35" />
+  <rect x="7" y="4" width="10" height="5" rx="1.5" fill="#FF6B35" />
+  <!-- Anvil base -->
+  <path d="M6 20 L18 20 L17 18 L7 18 Z" fill="#FF6B35" />
+</svg>

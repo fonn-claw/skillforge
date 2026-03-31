@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+  <!-- Star rune - expert -->
+  <path d="M12 2 L14 9 L21 9 L16 14 L18 21 L12 17 L6 21 L8 14 L3 9 L10 9 Z" fill="none" stroke="#F0A830" stroke-width="2" />
+  <circle cx="12" cy="12" r="3" fill="#F0A830" />
+</svg>

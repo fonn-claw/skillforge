@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+  <!-- Linked rings - Collaborator archetype -->
+  <circle cx="9" cy="12" r="5" fill="none" stroke="#A78BFA" stroke-width="2" />
+  <circle cx="15" cy="12" r="5" fill="none" stroke="#A78BFA" stroke-width="2" />
+  <!-- Center overlap dot -->
+  <circle cx="12" cy="12" r="1.5" fill="#A78BFA" />
+</svg>

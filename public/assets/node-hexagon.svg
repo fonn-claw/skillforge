@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Base hexagonal node shape -->
+  <polygon points="32,4 56,18 56,46 32,60 8,46 8,18" fill="#151A28" stroke="#2A3150" stroke-width="2" />
+  <!-- Inner hexagon for depth -->
+  <polygon points="32,12 48,22 48,42 32,52 16,42 16,22" fill="none" stroke="#2A3150" stroke-width="1" opacity="0.5" />
+</svg>

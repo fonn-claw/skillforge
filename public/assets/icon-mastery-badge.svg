@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+  <!-- Shield badge -->
+  <path d="M12 2 L20 6 L20 13 C20 17 16 21 12 22 C8 21 4 17 4 13 L4 6 Z" fill="none" stroke="#F0A830" stroke-width="2" />
+  <!-- Star in center -->
+  <path d="M12 7 L13 10 L16 10 L14 12 L15 15 L12 13 L9 15 L10 12 L8 10 L11 10 Z" fill="#F0A830" />
+</svg>
