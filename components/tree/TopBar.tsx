@@ -117,9 +117,9 @@ export default function TopBar() {
         <img
           src="/assets/logo.svg"
           alt="SkillForge"
-          width={120}
-          height={29}
-          className="h-[29px] w-auto"
+          width={140}
+          height={34}
+          className="h-[34px] w-auto min-w-[140px]"
         />
 
         {/* Dropdown menu */}
