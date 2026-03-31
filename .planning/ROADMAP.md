@@ -44,12 +44,12 @@ Plans:
   3. Nodes unlock when prerequisites are met, with animated energy flow along connections and a flash transition on the newly unlocked node
   4. Minimap in bottom-left shows full tree with viewport indicator; top bar shows archetype badge, progress counter, and avatar
   5. Tree renders responsively on desktop and tablet viewports
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
-- [ ] 02-03: TBD
+- [ ] 02-01-PLAN.md — Core React Flow canvas with hexagonal nodes, animated edges, mastery CSS, minimap, and zoom/pan
+- [ ] 02-02-PLAN.md — Top bar (archetype/progress/avatar), node detail panel (slide-in), mastery steps, challenges API, responsive
+- [ ] 02-03-PLAN.md — Prerequisite unlock logic, energy flow animation on edges, node flash on unlock
 
 ### Phase 3: Engagement Loop
 **Goal**: Learners can discover their archetype, complete challenges to level up skills, and experience the full mastery progression loop that makes the tree come alive
@@ -92,6 +92,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/3 | Planning complete | - |
-| 2. Skill Tree Canvas | 0/3 | Not started | - |
+| 2. Skill Tree Canvas | 0/3 | Planning complete | - |
 | 3. Engagement Loop | 0/2 | Not started | - |
 | 4. Role Views and Polish | 0/3 | Not started | - |
