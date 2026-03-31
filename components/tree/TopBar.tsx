@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Menu, Star, LogOut, BarChart3, ClipboardCheck } from "lucide-react";
+import { Menu, Star, LogOut, BarChart3, ClipboardCheck, Settings } from "lucide-react";
 import { useMentorContext } from "./MentorContext";
+import AdminPanel from "@/components/admin/AdminPanel";
 
 type UserData = {
   id: string;
@@ -29,6 +30,7 @@ export default function TopBar() {
   const [progress, setProgress] = useState({ completed: 0, total: 0 });
   const { heatmapMode, setHeatmapMode, reviewPanelOpen, setReviewPanelOpen } = useMentorContext();
   const [pendingReviewCount, setPendingReviewCount] = useState(0);
+  const [adminPanelOpen, setAdminPanelOpen] = useState(false);
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -66,6 +68,7 @@ export default function TopBar() {
   const initial = user?.displayName?.charAt(0)?.toUpperCase() ?? "?";
 
   return (
+    <>
     <header className="fixed top-0 left-0 right-0 h-12 z-50 flex items-center justify-between px-4 bg-[#151A28]/90 backdrop-blur-md border-b border-steel-edge">
       {/* Left: menu + logo */}
       <div className="flex items-center gap-3">
@@ -152,6 +155,21 @@ export default function TopBar() {
           </>
         )}
 
+        {/* Admin: settings toggle */}
+        {user?.role === "admin" && (
+          <button
+            onClick={() => setAdminPanelOpen(!adminPanelOpen)}
+            className={`relative p-1.5 rounded transition-colors ${
+              adminPanelOpen
+                ? "bg-ember-gold/20 text-ember-gold"
+                : "text-mist hover:text-moonlight"
+            }`}
+            title={adminPanelOpen ? "Close admin panel" : "Open admin panel"}
+          >
+            <Settings size={18} />
+          </button>
+        )}
+
         <div
           className="w-8 h-8 rounded-full flex items-center justify-center text-moonlight font-heading text-sm shrink-0"
           style={{
@@ -169,5 +187,12 @@ export default function TopBar() {
         </button>
       </div>
     </header>
+
+    {/* Admin Panel overlay */}
+    <AdminPanel
+      open={adminPanelOpen}
+      onClose={() => setAdminPanelOpen(false)}
+    />
+    </>
   );
 }
