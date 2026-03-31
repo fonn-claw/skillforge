@@ -15,6 +15,7 @@ export const COOKIE_OPTIONS = {
 export async function signToken(payload: {
   userId: string;
   role: string;
+  archetypeId?: string | null;
 }): Promise<string> {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
@@ -24,7 +25,7 @@ export async function signToken(payload: {
 
 export async function verifyToken(
   token: string
-): Promise<{ userId: string; role: string }> {
+): Promise<{ userId: string; role: string; archetypeId?: string | null }> {
   const { payload } = await jwtVerify(token, secret);
-  return payload as { userId: string; role: string };
+  return payload as { userId: string; role: string; archetypeId?: string | null };
 }

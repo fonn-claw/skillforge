@@ -51,7 +51,7 @@ export async function POST(request: Request) {
         role: users.role,
       });
 
-    const token = await signToken({ userId: user.id, role: user.role });
+    const token = await signToken({ userId: user.id, role: user.role, archetypeId: null });
 
     const response = NextResponse.json(user, { status: 201 });
     response.cookies.set(SESSION_COOKIE_NAME, token, COOKIE_OPTIONS);
