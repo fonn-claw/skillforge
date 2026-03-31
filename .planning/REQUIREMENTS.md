@@ -20,14 +20,14 @@
 - [x] **TREE-04**: Connection lines animate with gradient flow when prerequisites are met
 - [x] **TREE-05**: Minimap shows full tree with current viewport highlighted (bottom-left)
 - [x] **TREE-06**: Mastered nodes emit slow rhythmic pulse in their mastery color
-- [ ] **TREE-07**: Top bar displays archetype badge, progress counter, and user avatar (48px, semi-transparent)
+- [x] **TREE-07**: Top bar displays archetype badge, progress counter, and user avatar (48px, semi-transparent)
 
 ### Node Interaction
 
-- [ ] **NODE-01**: Clicking a node opens a floating detail panel (400px, slides from right)
-- [ ] **NODE-02**: Detail panel shows skill name, mastery level badge, description, prerequisites with check/lock status
-- [ ] **NODE-03**: Detail panel shows available challenges as stacked clickable cards
-- [ ] **NODE-04**: Mastery progress displayed as 5 rune-like step indicators (not a progress bar)
+- [x] **NODE-01**: Clicking a node opens a floating detail panel (400px, slides from right)
+- [x] **NODE-02**: Detail panel shows skill name, mastery level badge, description, prerequisites with check/lock status
+- [x] **NODE-03**: Detail panel shows available challenges as stacked clickable cards
+- [x] **NODE-04**: Mastery progress displayed as 5 rune-like step indicators (not a progress bar)
 - [x] **NODE-05**: Hovering a node shows tooltip with skill name and current level
 
 ### Prerequisite System
@@ -87,7 +87,7 @@
 - [x] **DSGN-01**: Dark RPG-inspired theme using design spec colors (Void Black #0A0E17 background, Forge Gray panels, Arcane Blue primary)
 - [x] **DSGN-02**: Cinzel font for headings/skill names, IBM Plex Sans for body text
 - [x] **DSGN-03**: All pre-generated assets from public/assets/ used as documented (logos, node icons, archetype portraits, backgrounds)
-- [ ] **DSGN-04**: Responsive design that works on desktop and tablet viewports
+- [x] **DSGN-04**: Responsive design that works on desktop and tablet viewports
 
 ## v2 Requirements
 
@@ -134,11 +134,11 @@
 | TREE-04 | Phase 2 | Complete |
 | TREE-05 | Phase 2 | Complete |
 | TREE-06 | Phase 2 | Complete |
-| TREE-07 | Phase 2 | Pending |
-| NODE-01 | Phase 2 | Pending |
-| NODE-02 | Phase 2 | Pending |
-| NODE-03 | Phase 2 | Pending |
-| NODE-04 | Phase 2 | Pending |
+| TREE-07 | Phase 2 | Complete |
+| NODE-01 | Phase 2 | Complete |
+| NODE-02 | Phase 2 | Complete |
+| NODE-03 | Phase 2 | Complete |
+| NODE-04 | Phase 2 | Complete |
 | NODE-05 | Phase 2 | Complete |
 | PREREQ-01 | Phase 2 | Complete |
 | PREREQ-02 | Phase 2 | Complete |
@@ -174,7 +174,7 @@
 | DSGN-01 | Phase 1 | Complete |
 | DSGN-02 | Phase 1 | Complete |
 | DSGN-03 | Phase 1 | Complete |
-| DSGN-04 | Phase 2 | Pending |
+| DSGN-04 | Phase 2 | Complete |
 
 **Coverage:**
 - v1 requirements: 42 total
