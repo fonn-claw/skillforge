@@ -1,8 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Menu, Star, LogOut, BarChart3, ClipboardCheck, Settings } from "lucide-react";
+import {
+  Menu,
+  Star,
+  LogOut,
+  BarChart3,
+  ClipboardCheck,
+  Settings,
+  X,
+  User,
+  Map,
+  BookOpen,
+} from "lucide-react";
 import { useMentorContext } from "./MentorContext";
 import AdminPanel from "@/components/admin/AdminPanel";
 
@@ -31,6 +42,8 @@ export default function TopBar() {
   const { heatmapMode, setHeatmapMode, reviewPanelOpen, setReviewPanelOpen } = useMentorContext();
   const [pendingReviewCount, setPendingReviewCount] = useState(0);
   const [adminPanelOpen, setAdminPanelOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -59,21 +72,47 @@ export default function TopBar() {
       .catch(() => {});
   }, [user]);
 
+  // Close menu on outside click
+  useEffect(() => {
+    if (!menuOpen) return;
+    function handleClick(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [menuOpen]);
+
   async function handleLogout() {
     await fetch("/api/auth/logout", { method: "POST" });
-    router.push("/login");
+    window.location.href = "/login";
   }
 
   const archetype = user?.archetype;
+  const isMentorOrAdmin = user?.role === "mentor" || user?.role === "admin";
+  const isAdmin = user?.role === "admin";
   const initial = user?.displayName?.charAt(0)?.toUpperCase() ?? "?";
+
+  const roleBadge = isAdmin
+    ? { label: "Admin", color: "#F0A830" }
+    : isMentorOrAdmin
+      ? { label: "Mentor", color: "#4A7CFF" }
+      : { label: "Learner", color: "#34D399" };
 
   return (
     <>
     <header className="fixed top-0 left-0 right-0 h-12 z-50 flex items-center justify-between px-4 bg-[#151A28]/90 backdrop-blur-md border-b border-steel-edge">
       {/* Left: menu + logo */}
-      <div className="flex items-center gap-3">
-        <button className="text-mist hover:text-moonlight transition-colors">
-          <Menu size={20} />
+      <div className="flex items-center gap-3 relative" ref={menuRef}>
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className={`p-1 rounded transition-colors ${
+            menuOpen ? "text-moonlight bg-anvil-gray" : "text-mist hover:text-moonlight"
+          }`}
+          title="Menu"
+        >
+          {menuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
         <img
           src="/assets/logo.svg"
@@ -82,6 +121,128 @@ export default function TopBar() {
           height={29}
           className="h-[29px] w-auto"
         />
+
+        {/* Dropdown menu */}
+        {menuOpen && (
+          <div className="absolute top-full left-0 mt-1 w-64 bg-[#151A28] border border-steel-edge rounded-lg shadow-2xl overflow-hidden z-[60]">
+            {/* User info */}
+            <div className="px-4 py-3 border-b border-steel-edge">
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-9 h-9 rounded-full flex items-center justify-center text-moonlight font-heading text-sm shrink-0"
+                  style={{ backgroundColor: archetype?.color ?? "#1E2438" }}
+                >
+                  {initial}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-moonlight text-sm font-medium truncate">
+                    {user?.displayName ?? "User"}
+                  </p>
+                  <span
+                    className="text-xs font-heading px-1.5 py-0.5 rounded"
+                    style={{
+                      backgroundColor: `${roleBadge.color}20`,
+                      color: roleBadge.color,
+                    }}
+                  >
+                    {roleBadge.label}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Navigation */}
+            <div className="py-1">
+              <button
+                onClick={() => { setMenuOpen(false); }}
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-moonlight hover:bg-anvil-gray transition-colors"
+              >
+                <Map size={16} className="text-arcane-blue" />
+                Skill Tree
+              </button>
+
+              {archetype && (
+                <button
+                  onClick={() => { setMenuOpen(false); router.push("/archetype-quiz"); }}
+                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-mist hover:bg-anvil-gray hover:text-moonlight transition-colors"
+                >
+                  <User size={16} />
+                  My Archetype
+                </button>
+              )}
+
+              {isMentorOrAdmin && (
+                <>
+                  <div className="border-t border-steel-edge my-1" />
+                  <p className="px-4 py-1 text-xs text-mist/60 font-heading uppercase tracking-wider">
+                    Mentor Tools
+                  </p>
+                  <button
+                    onClick={() => {
+                      setHeatmapMode(!heatmapMode);
+                      setMenuOpen(false);
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-mist hover:bg-anvil-gray hover:text-moonlight transition-colors"
+                  >
+                    <BarChart3 size={16} className={heatmapMode ? "text-arcane-blue" : ""} />
+                    Cohort Heatmap
+                    {heatmapMode && (
+                      <span className="ml-auto text-xs text-arcane-blue">ON</span>
+                    )}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setReviewPanelOpen(!reviewPanelOpen);
+                      setMenuOpen(false);
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-mist hover:bg-anvil-gray hover:text-moonlight transition-colors"
+                  >
+                    <ClipboardCheck size={16} className={reviewPanelOpen ? "text-arcane-blue" : ""} />
+                    Review Submissions
+                    {pendingReviewCount > 0 && (
+                      <span className="ml-auto text-xs bg-ember-gold text-void-black rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                        {pendingReviewCount > 9 ? "9+" : pendingReviewCount}
+                      </span>
+                    )}
+                  </button>
+                </>
+              )}
+
+              {isAdmin && (
+                <>
+                  <div className="border-t border-steel-edge my-1" />
+                  <p className="px-4 py-1 text-xs text-mist/60 font-heading uppercase tracking-wider">
+                    Admin Tools
+                  </p>
+                  <button
+                    onClick={() => {
+                      setAdminPanelOpen(!adminPanelOpen);
+                      setMenuOpen(false);
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-mist hover:bg-anvil-gray hover:text-moonlight transition-colors"
+                  >
+                    <Settings size={16} className={adminPanelOpen ? "text-ember-gold" : ""} />
+                    Admin Panel
+                    {adminPanelOpen && (
+                      <span className="ml-auto text-xs text-ember-gold">OPEN</span>
+                    )}
+                  </button>
+                </>
+              )}
+            </div>
+
+            {/* Logout */}
+            <div className="border-t border-steel-edge py-1">
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-mist hover:bg-anvil-gray hover:text-blood-ruby transition-colors"
+              >
+                <LogOut size={16} />
+                Sign Out
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Center: archetype badge + progress */}
@@ -123,7 +284,7 @@ export default function TopBar() {
       {/* Right: mentor controls + avatar + logout */}
       <div className="flex items-center gap-3">
         {/* Mentor/Admin: heatmap toggle + review button */}
-        {user && (user.role === "mentor" || user.role === "admin") && (
+        {isMentorOrAdmin && (
           <>
             <button
               onClick={() => setHeatmapMode(!heatmapMode)}
@@ -156,7 +317,7 @@ export default function TopBar() {
         )}
 
         {/* Admin: settings toggle */}
-        {user?.role === "admin" && (
+        {isAdmin && (
           <button
             onClick={() => setAdminPanelOpen(!adminPanelOpen)}
             className={`relative p-1.5 rounded transition-colors ${

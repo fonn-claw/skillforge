@@ -84,11 +84,11 @@ export default function ReviewPanel({ open, onClose }: Props) {
 
   return (
     <motion.div
-      initial={{ x: -400, opacity: 0 }}
+      initial={{ x: 400, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      exit={{ x: -400, opacity: 0 }}
+      exit={{ x: 400, opacity: 0 }}
       transition={{ type: "spring", damping: 25, stiffness: 200 }}
-      className="absolute top-0 left-0 w-[400px] h-full z-50 bg-[#151A28]/95 backdrop-blur-[20px] border-r border-steel-edge overflow-y-auto p-6"
+      className="absolute top-0 right-0 w-[400px] h-full z-50 bg-[#151A28]/95 backdrop-blur-[20px] border-l border-steel-edge overflow-y-auto p-6"
     >
       {/* Close */}
       <button
