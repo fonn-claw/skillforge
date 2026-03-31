@@ -6,6 +6,8 @@ const cinzel = Cinzel({
   subsets: ["latin"],
   weight: ["400", "700"],
   variable: "--font-cinzel",
+  display: "block",
+  preload: true,
 });
 
 const ibmPlexSans = IBM_Plex_Sans({
