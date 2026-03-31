@@ -16,6 +16,9 @@ import { AnimatePresence } from "framer-motion";
 import HexagonNode from "./HexagonNode";
 import PrerequisiteEdge from "./PrerequisiteEdge";
 import NodeDetailPanel from "./NodeDetailPanel";
+import { HeatmapDetailPanel, type HeatmapNodeData } from "@/components/mentor/HeatmapOverlay";
+import ReviewPanel from "@/components/mentor/ReviewPanel";
+import { useMentorContext } from "./MentorContext";
 import {
   computeNodeUnlockStatus,
   computeEdgeStatus,
@@ -150,6 +153,9 @@ export default function SkillTreeFlow() {
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const { heatmapMode, reviewPanelOpen, setReviewPanelOpen } = useMentorContext();
+  const [heatmapData, setHeatmapData] = useState<HeatmapNodeData[]>([]);
+  const [selectedHeatmapNode, setSelectedHeatmapNode] = useState<HeatmapNodeData | null>(null);
 
   // Track previous lock states to detect unlock transitions
   const prevLockMapRef = useRef<Map<string, boolean>>(new Map());
@@ -235,12 +241,61 @@ export default function SkillTreeFlow() {
       });
   }, [refreshTree]);
 
+  // Fetch heatmap data when heatmap mode is enabled
+  useEffect(() => {
+    if (!heatmapMode) {
+      setHeatmapData([]);
+      setSelectedHeatmapNode(null);
+      return;
+    }
+    fetch("/api/mentor/heatmap")
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data: HeatmapNodeData[]) => setHeatmapData(data))
+      .catch(() => setHeatmapData([]));
+  }, [heatmapMode]);
+
+  // Merge heatmap data into nodes when available
+  useEffect(() => {
+    if (heatmapData.length === 0) {
+      // Remove heatmapData from nodes if present
+      setNodes((prev) =>
+        prev.map((n) => {
+          if ((n.data as Record<string, unknown>).heatmapData) {
+            const { heatmapData: _, ...rest } = n.data as Record<string, unknown>;
+            return { ...n, data: rest };
+          }
+          return n;
+        })
+      );
+      return;
+    }
+    const heatmapMap = new Map(heatmapData.map((h) => [h.nodeId, h]));
+    setNodes((prev) =>
+      prev.map((n) => {
+        const hd = heatmapMap.get(n.id);
+        return hd
+          ? { ...n, data: { ...n.data, heatmapData: hd } }
+          : n;
+      })
+    );
+  }, [heatmapData, setNodes]);
+
   const onNodeClick = useCallback((_: React.MouseEvent, node: Node) => {
+    if (heatmapMode) {
+      const hd = (node.data as Record<string, unknown>).heatmapData as HeatmapNodeData | undefined;
+      if (hd) {
+        setSelectedHeatmapNode(hd);
+        setSelectedNodeId(null);
+        return;
+      }
+    }
+    setSelectedHeatmapNode(null);
     setSelectedNodeId(node.id);
-  }, []);
+  }, [heatmapMode]);
 
   const onPaneClick = useCallback(() => {
     setSelectedNodeId(null);
+    setSelectedHeatmapNode(null);
   }, []);
 
   if (loading) {
@@ -290,7 +345,7 @@ export default function SkillTreeFlow() {
           />
         </ReactFlow>
         <AnimatePresence>
-          {selectedNodeId && (
+          {selectedNodeId && !heatmapMode && (
             <NodeDetailPanel
               nodeId={selectedNodeId}
               nodesData={nodes}
@@ -299,6 +354,17 @@ export default function SkillTreeFlow() {
               onTreeRefresh={refreshTree}
             />
           )}
+          {selectedHeatmapNode && heatmapMode && (
+            <HeatmapDetailPanel
+              data={selectedHeatmapNode}
+              onClose={() => setSelectedHeatmapNode(null)}
+            />
+          )}
+        </AnimatePresence>
+
+        {/* Review Panel */}
+        <AnimatePresence>
+          {reviewPanelOpen && <ReviewPanel open={reviewPanelOpen} onClose={() => setReviewPanelOpen(false)} />}
         </AnimatePresence>
       </div>
     </TreeSelectionContext.Provider>
