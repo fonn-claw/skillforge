@@ -69,10 +69,10 @@
 
 ### Admin Features
 
-- [ ] **ADMN-01**: Admin can add new skill nodes to the tree with name, description, and position
-- [ ] **ADMN-02**: Admin can create/remove prerequisite connections between nodes
-- [ ] **ADMN-03**: Admin can define mastery criteria and challenges for each node
-- [ ] **ADMN-04**: Admin sees engagement analytics: popular paths, drop-off nodes, learner counts per mastery level
+- [x] **ADMN-01**: Admin can add new skill nodes to the tree with name, description, and position
+- [x] **ADMN-02**: Admin can create/remove prerequisite connections between nodes
+- [x] **ADMN-03**: Admin can define mastery criteria and challenges for each node
+- [x] **ADMN-04**: Admin sees engagement analytics: popular paths, drop-off nodes, learner counts per mastery level
 
 ### Demo Data
 
@@ -162,10 +162,10 @@
 | MENT-02 | Phase 4 | Complete |
 | MENT-03 | Phase 4 | Complete |
 | MENT-04 | Phase 4 | Complete |
-| ADMN-01 | Phase 4 | Pending |
-| ADMN-02 | Phase 4 | Pending |
-| ADMN-03 | Phase 4 | Pending |
-| ADMN-04 | Phase 4 | Pending |
+| ADMN-01 | Phase 4 | Complete |
+| ADMN-02 | Phase 4 | Complete |
+| ADMN-03 | Phase 4 | Complete |
+| ADMN-04 | Phase 4 | Complete |
 | DEMO-01 | Phase 1 | Complete |
 | DEMO-02 | Phase 1 | Complete |
 | DEMO-03 | Phase 1 | Complete |
