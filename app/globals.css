@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @config "../tailwind.config.ts";
 
-/* Ensure Cinzel font variable is available globally */
+/* Ensure heading font variable is available globally */
 :root {
-  --font-cinzel: "Cinzel", serif;
+  --font-cinzel: "Chakra Petch", sans-serif;
 }

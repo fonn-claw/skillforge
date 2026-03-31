@@ -254,7 +254,7 @@ export default function TopBar() {
               style={{ borderColor: archetype.color }}
             >
               <img
-                src={`/assets/icon-archetype-${archetype.iconKey}.svg`}
+                src={`/assets/${archetype.iconKey}.svg`}
                 alt={archetype.name}
                 width={20}
                 height={20}

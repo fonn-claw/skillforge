@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Cinzel, IBM_Plex_Sans } from "next/font/google";
+import { Chakra_Petch, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 
-const cinzel = Cinzel({
+const headingFont = Chakra_Petch({
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "600", "700"],
   variable: "--font-cinzel",
-  display: "block",
+  display: "swap",
   preload: true,
 });
 
@@ -31,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${cinzel.variable} ${ibmPlexSans.variable}`}>
+    <html lang="en" className={`${headingFont.variable} ${ibmPlexSans.variable}`}>
       <body className="bg-void-black text-moonlight font-body antialiased">
         {children}
       </body>
