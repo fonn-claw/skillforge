@@ -76,11 +76,11 @@
 
 ### Demo Data
 
-- [ ] **DEMO-01**: CodeForge Academy with web dev skill tree: 3 branches (Frontend, Backend, DevOps), ~15 nodes
-- [ ] **DEMO-02**: 20 learners at various progression points including 1 advanced (Expert React), 1 beginner, 3 stuck on Database
-- [ ] **DEMO-03**: 3 demo accounts: learner@skillforge.app, mentor@skillforge.app, admin@skillforge.app (all password: demo1234)
-- [ ] **DEMO-04**: Pre-populated challenges with quiz questions for each node at each mastery level
-- [ ] **DEMO-05**: 4 learner archetypes represented across demo learners
+- [x] **DEMO-01**: CodeForge Academy with web dev skill tree: 3 branches (Frontend, Backend, DevOps), ~15 nodes
+- [x] **DEMO-02**: 20 learners at various progression points including 1 advanced (Expert React), 1 beginner, 3 stuck on Database
+- [x] **DEMO-03**: 3 demo accounts: learner@skillforge.app, mentor@skillforge.app, admin@skillforge.app (all password: demo1234)
+- [x] **DEMO-04**: Pre-populated challenges with quiz questions for each node at each mastery level
+- [x] **DEMO-05**: 4 learner archetypes represented across demo learners
 
 ### Visual Design
 
@@ -166,11 +166,11 @@
 | ADMN-02 | Phase 4 | Pending |
 | ADMN-03 | Phase 4 | Pending |
 | ADMN-04 | Phase 4 | Pending |
-| DEMO-01 | Phase 1 | Pending |
-| DEMO-02 | Phase 1 | Pending |
-| DEMO-03 | Phase 1 | Pending |
-| DEMO-04 | Phase 1 | Pending |
-| DEMO-05 | Phase 1 | Pending |
+| DEMO-01 | Phase 1 | Complete |
+| DEMO-02 | Phase 1 | Complete |
+| DEMO-03 | Phase 1 | Complete |
+| DEMO-04 | Phase 1 | Complete |
+| DEMO-05 | Phase 1 | Complete |
 | DSGN-01 | Phase 1 | Complete |
 | DSGN-02 | Phase 1 | Complete |
 | DSGN-03 | Phase 1 | Complete |
